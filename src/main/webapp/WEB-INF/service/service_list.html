@@ -37,18 +37,22 @@
             var osUsername = $("<td></td>").html("<p>" + msg.osUsername + "</p>")
             var status = $("<td></td>").html("<p>" + msg.status + "</p>")
             var unixHost = $("<td></td>").html("<p>" + msg.unixHost + "</p>")
-            var costType = $("<td></td>").html("<p>" + msg.cost.name+ "</p>")
-//                if (msg.status==0){
-//                    var status =$("<td></td>").html("暂停");
-//                    var imp = $("<td></td>").html("  <input type='button' value='启用' class='btn_start' />").click(startFee).attr("num2", msg.costId);
-//                }else if(msg.status==1){
-//                    var status=$("<td></td>").html("开通");
-//                    var imp = $("<td></td>").html("  <input type='button' value='暂停' class='btn_pause' />");
-//                }
+            var costType = $("<td></td>").html("<p>" + msg.cost.name + "</p>")
+            if (msg.status == 1) {
+                var status = $("<td></td>").html("开通");
+                var imp = $("<td></td>").html("  <input type='button' value='暂停' class='btn_pause' />").click(updateByServiceStart).attr("num2", msg.serviceId);
+            } else if (msg.status == 0) {
+                var status = $("<td></td>").html("暂停");
+                var imp = $("<td></td>").html("  <input type='button' value='启用' class='btn_start' />").click(updateByServicePause).attr("num3", msg.serviceId);
+            } else if (msg.status == 2) {
+                var status = $("<td></td>").html("删除")
+                var imp = $("<td></td>").html(" <input type='button' value='启用' class='btn_start' />")
+
+            }
             var imp = $("<td></td>").html("  <input type='button' value='启用' class='btn_start' />")
 
             var imp1 = $("<td></td>").html("<input type='button' value='修改' class='btn_modify' />")
-            var imp2 = $("<td></td>").html("  <input type='button' value='删除' class='btn_delete'/>")
+            var imp2 = $("<td></td>").html("  <input type='button' value='删除' class='btn_delete'/>").click(findbyIdServicedel).attr("num", msg.serviceId)
             var trob = $("<tr></tr>").attr("class", "emp").append(serviceId).append(accountId).append(idcardNo)
                     .append(realName).append(osUsername).append(status).append(unixHost).append(costType).append(imp).append(imp1).append(imp2)
 
@@ -130,7 +134,90 @@
 
         }
 
+        //根据id判断
+        function findbyIdServicedel() {
 
+            var id = $(this).attr("num")
+            $.ajax({
+                url: "/findbyIdServicedel",
+                data: {
+                    serviceId: id
+                },
+                success: function (result) {
+
+                    if (result.data.status == 0) {
+
+                        updateByServiceDelete(id)
+
+                    }
+                    else {
+                        window.location.href = "/service"
+                    }
+                }
+            })
+        }
+
+        //删除状态
+        function updateByServiceDelete(id) {
+
+
+            alert(1)
+            $.ajax({
+                url: "/updateByServiceDelete",
+                data: {
+                    serviceId: id,
+                    closeDate: new Date()
+                },
+                success: function (result) {
+//                    startime(id)
+                    if (result.data.status == 0) {
+
+                    }
+                    window.location.href = "/service"
+
+                }
+
+            })
+        }
+
+        //修改为暂停状态
+        function updateByServiceStart() {
+            var id = $(this).attr("num2")
+
+            alert(1)
+            $.ajax({
+                url: "/updateByServiceStart",
+                data: {
+                    serviceId: id,
+                },
+                success: function (result) {
+//                    startime(id)
+                    window.location.href = "/service"
+
+                }
+
+            })
+        }
+
+        //修改为启用状态
+        function updateByServicePause() {
+            var id = $(this).attr("num3")
+
+            alert(1)
+            $.ajax({
+                url: "/updateByServicePause",
+                data: {
+                    serviceId: id,
+                    pauseDate: new Date()
+                },
+                success: function (result) {
+//                    startime(id)
+                    window.location.href = "/service"
+
+                }
+
+            })
+        }
 
 
     </script>

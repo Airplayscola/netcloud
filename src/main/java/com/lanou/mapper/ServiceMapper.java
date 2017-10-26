@@ -1,5 +1,6 @@
 package com.lanou.mapper;
 
+import com.lanou.bean.Account;
 import com.lanou.bean.Service;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,5 +20,10 @@ public interface ServiceMapper {
 
     int updateByPrimaryKey(Service record);
     List<Service> findAll();
+
+    int updateByDelete(Service record);
+    int updateByStart(Service record);
+    int updateByPause(Service record);
+
 
 }

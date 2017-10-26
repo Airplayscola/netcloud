@@ -302,6 +302,6 @@
     UPDATE account SET status=0 WHERE account_id=#{accountId,jdbcType=INTEGER}
   </update>
     <update id="updateByPause">
-    UPDATE account SET status=1 WHERE account_id=#{accountId,jdbcType=INTEGER}
+    UPDATE account SET status=1,pause_date=#{pauseDate} WHERE account_id=#{accountId,jdbcType=INTEGER}
   </update>
 </mapper>

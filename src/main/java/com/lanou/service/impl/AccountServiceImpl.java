@@ -42,18 +42,22 @@ public class AccountServiceImpl implements AccountService {
         return accountMapper.selectByPrimaryKey(accountId);
     }
 
+    //修改
     public Integer update(Account account) {
         return accountMapper.updateByPrimaryKey(account);
     }
 
+    //修改为删除状态
     public Integer updateByDelete(Account account) {
         return accountMapper.updateByDelete(account);
     }
 
+    //修改为启用状态
     public Integer updateByStart(Account account) {
         return accountMapper.updateByStart(account);
     }
 
+    //修改为暂停状态
     public Integer updateByPause(Account account) {
         return accountMapper.updateByPause(account);
     }

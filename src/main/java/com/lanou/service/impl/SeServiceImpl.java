@@ -38,6 +38,22 @@ public class SeServiceImpl implements SeService {
         return accountMapper.selectByIdCard(idcard);
     }
 
+    public Integer updateByDelete(Service service) {
+        return serviceMapper.updateByDelete(service);
+    }
+
+    public Integer updateByStart(Service service) {
+        return serviceMapper.updateByStart(service);
+    }
+
+    public Integer updateByPause(Service service) {
+        return serviceMapper.updateByPause(service);
+    }
+
+    public Service selectBySerPrimaryKey(Integer serviceId) {
+        return serviceMapper.selectByPrimaryKey(serviceId);
+    }
+
     public PageInfo<Service> queryCostByPage(Integer pageNo, Integer pageSize) {
         pageNo = pageNo == null ? 1 : pageNo;
         pageSize = pageSize == null ? 5 : pageSize;

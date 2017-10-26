@@ -5,6 +5,8 @@ import java.util.Date;
 public class Service {
     private Integer serviceId;
 
+    private Integer accountId;
+
     private String unixHost;
 
     private String osUsername;
@@ -21,10 +23,29 @@ public class Service {
 
     private Account account;
 
+    private Integer costId;
+
     private Cost cost;
+
+
+    public Integer getCostId() {
+        return costId;
+    }
+
+    public void setCostId(Integer costId) {
+        this.costId = costId;
+    }
 
     public Cost getCost() {
         return cost;
+    }
+
+    public Integer getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
     }
 
     public void setCost(Cost cost) {

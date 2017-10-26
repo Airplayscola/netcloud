@@ -207,27 +207,6 @@
 
 
     }
-    //    //删除
-    //    function deleteFee(id) {
-    ////                var r = window.confirm("确定要删除此资费吗？");
-    ////                document.getElementById("operate_result_info").style.display = "block";
-    //        var id = $(this).attr("num")
-    //
-    //
-    //        $.ajax({
-    //            url: "/deleteaccount",
-    //            data: {
-    //                accountId: id
-    //            },
-    //            success: function (result) {
-    //                window.location.href = "/account"
-    //
-    //            }
-    //        })
-    //
-    //
-    //    }
-    //
 
 
     //根据id查找
@@ -324,6 +303,7 @@
             url: "/updateByPause",
             data: {
                 accountId: id,
+                pauseDate:new Date()
             },
             success: function (result) {
 //                    startime(id)
