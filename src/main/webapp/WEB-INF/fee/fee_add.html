@@ -57,6 +57,14 @@
         //给按钮添加点击事件
         function add() {
 
+            var costType=null;
+            if ($("#monthly").checked==true){
+                costType="包月";
+            }else if ($("#package").checked==true){
+                costType="套餐";
+            }else {
+                costType="计时";
+            }
 
             alert(1)
             $.ajax({
@@ -66,7 +74,8 @@
                     name: $("#costName").val(),
                     baseDuration: $("#baseDuration").val(),
                     baseCost: $("#baseCost").val(),
-                    costType:$("#costType").val(),
+                    creatime:new Date(),
+                    costType:costType,
                     unitCost: $("#unitCost").val(),
                     descr: $("#descr").val()
 
