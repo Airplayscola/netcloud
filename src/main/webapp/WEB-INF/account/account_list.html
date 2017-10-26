@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>云科技</title>
+    <link type="text/css" rel="stylesheet" media="all" href="../styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
+    <script language="javascript" type="text/javascript">
+        //删除
+        function deleteAccount() {
+            var r = window.confirm("确定要删除此账务账号吗？\r\n删除后将不能恢复，且会删除其下属的所有业务账号。");
+            document.getElementById("operate_result_info").style.display = "block";
+        }
+        //开通或暂停
+        function setState() {
+            var r = window.confirm("确定要开通此账务账号吗？");
+            document.getElementById("operate_result_info").style.display = "block";
+        }
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="../images/logo.png" alt="logo" class="left"/>
+    <a href="#">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a href="../role/role_list.html" class="role_off"></a></li>
+        <li><a href="../admin/admin_list.html" class="admin_off"></a></li>
+        <li><a href="/list" class="fee_off"></a></li>
+        <li><a href="/account" class="account_on"></a></li>
+        <li><a href="/service" class="service_off"></a></li>
+        <li><a href="../bill/bill_list.html" class="bill_off"></a></li>
+        <li><a href="../report/report_list.html" class="report_off"></a></li>
+        <li><a href="../user/user_info.html" class="information_off"></a></li>
+        <li><a href="../user/user_modi_pwd.html" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+
+    <!--查询-->
+    <div class="search_add">
+        <div>身份证：<input type="text"  class="text_search" id="idcardNo"/></div>
+        <div>姓名：<input type="text" class="width70 text_search" id="realName"/></div>
+        <div>登录名：<input type="text" class="text_search" id="loginName"/></div>
+        <div>
+            状态：
+            <select class="select_search" id="status">
+                <option value="">全部</option>
+                <option value="1">开通</option>
+                <option value="0">暂停</option>
+                <option value="2">删除</option>
+            </select>
+        </div>
+        <div><input type="button" value="搜索" class="btn_search" onclick="selectall()"/></div>
+        <input type="button" value="增加" class="btn_add" onclick="location.href='/accountAdd';"/>
+    </div>
+    <!--删除等的操作提示-->
+    <div id="operate_result_info" class="operate_success">
+        <img src="../images/close.png" onclick="this.parentNode.style.display='none';"/>
+        删除成功，且已删除其下属的业务账号！
+    </div>
+    <!--数据区域：用表格展示数据-->
+    <div id="data">
+        <table id="datalist">
+            <tr>
+                <th>账号ID</th>
+                <th>姓名</th>
+                <th class="width150">身份证</th>
+                <th>登录名</th>
+                <th>状态</th>
+                <th class="width100">创建日期</th>
+                <th class="width150">上次登录时间</th>
+                <th class="width200" colspan="3">操作</th>
+            </tr>
+
+        </table>
+        <p>业务说明：<br/>
+            1、创建则开通，记载创建时间；<br/>
+            2、暂停后，记载暂停时间；<br/>
+            3、重新开通后，删除暂停时间；<br/>
+            4、删除后，记载删除时间，标示为删除，不能再开通、修改、删除；<br/>
+            5、暂停账务账号，同时暂停下属的所有业务账号；<br/>
+            6、暂停后重新开通账务账号，并不同时开启下属的所有业务账号，需要在业务账号管理中单独开启；<br/>
+            7、删除账务账号，同时删除下属的所有业务账号。</p>
+    </div>
+    <!--分页-->
+    <div id="pages">
+
+    </div>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
+    <p>版权所有(C)云科技有限公司 </p>
+</div>
+</body>
+<script src="/js/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+    //添加每一行
+    function addNewTr(msg) {
+        var accountId = $("<td></td>").html("<p>" + msg.accountId + "</p>")
+        var realName = $("<td></td>").html("<a href='/accountdetail'>" + msg.realName + "</a>").click(findbyaccountId).attr("num4",msg.accountId);
+        var idcardNo = $("<td></td>").html("<p>" + msg.idcardNo + "</p>")
+        var loginName = $("<td></td>").html("<p>" + msg.loginName + "</p>")
+        if (msg.status == 1) {
+            var status = $("<td></td>").html("开通")
+            var imp = $("<td></td>").html("  <input type='button' value='暂停' class='btn_pause' />").click(updateByStart).attr("num2", msg.accountId)
+        } else if (msg.status == 0) {
+            var status = $("<td></td>").html("暂停")
+            var imp = $("<td></td>").html("  <input type='button' value='启用' class='btn_start' />").click(updateByPause).attr("num3", msg.accountId)
+        } else if (msg.status == 2) {
+            var status = $("<td></td>").html("删除")
+            var imp = $("<td></td>").html(" <input type='button' value='启用' class='btn_start' />")
+
+        }
+        var createDate = $("<td></td>").html("<p>" + msg.createDate + "</p>")
+        var lastLoginTime = $("<td></td>").html("<p>" + msg.lastLoginTime + "</p>")
+        var imp1 = $("<td></td>").html("<input type='button' value='修改' class='btn_modify' />").click(findByAccountId).attr("num1", msg.accountId)
+        var imp2 = $("<td></td>").html("  <input type='button' value='删除' class='btn_delete'/>").click(findbyIdaccountdel).attr("num", msg.accountId)
+        var trob = $("<tr></tr>").attr("class", "emp").append(accountId).append(realName).append(idcardNo).append(loginName).append(status)
+                .append(createDate).append(lastLoginTime).append(imp).append(imp1).append(imp2)
+
+        $("#datalist").append(trob)
+    }
+
+    //查找全部
+    function findAll() {
+        $.ajax({
+            url: "/pageinfoaccount",
+            data: {
+                pageNo: 1,
+                pagesize: 5
+            },
+            success: function (result) {
+                var dataList = result.list;
+
+                console.log(dataList)
+//                for (var i = 0; i < dataList.length; i++) {
+//                    var list = dataList[i];
+//
+//                    addNewTr(list)
+//
+//                }
+                $.each(dataList, function (i, domEle) {
+                    addNewTr(domEle)
+                })
+                page(result)
+            }
+        })
+    }
+
+    findAll()
+
+    //每一页
+    function page(data) {
+        $("#pages").empty()
+        var size = 5
+        $("<a href='#'>首页</a>").attr("no", 1).attr("size", size).click(pageNo).appendTo($("#pages"))
+
+        if (data.isFirstPage) {
+            $("<a href='#'>上一页</a>").attr("no", 1).attr("size", size).click(pageNo).appendTo($("#pages"))
+        } else {
+            $("<a href='#'>上一页</a>").attr("no", data.prePage).attr("size", size).click(pageNo).appendTo($("#pages"))
+        }
+
+        for (var i = 1; i <= data.pages; i++) {
+            $("<a href='#'>" + i + "</a>").attr("no", i).attr("size", size).click(pageNo).appendTo($("#pages"))
+        }
+        if (data.isLastPage) {
+            $("<a href='#'>下一页</a>").attr("no", data.lastPage).attr("size", size).click(pageNo).appendTo($("#pages"))
+        } else {
+            $("<a href='#'>下一页</a>").attr("no", data.nextPage).attr("size", size).click(pageNo).appendTo($("#pages"))
+        }
+        $("<a href='#'>尾页</a>").attr("no", data.lastPage).attr("size", size).click(pageNo).appendTo($("#pages"))
+
+
+    }
+    function pageNo() {
+        var pageNo = $(this).attr("no")
+        var pageSize = $(this).attr("size")
+        $.ajax({
+            url: "/pageinfoaccount",
+            data: {
+                pageNo: pageNo,
+                pagesize: pageSize
+            },
+            success: function (result) {
+                console.log(result)
+                $(".emp").remove()
+                $.each(result.list, function (i, domEle) {
+                    addNewTr(domEle)
+                })
+
+                page(result)
+            }
+
+
+        })
+
+
+    }
+    //    //删除
+    //    function deleteFee(id) {
+    ////                var r = window.confirm("确定要删除此资费吗？");
+    ////                document.getElementById("operate_result_info").style.display = "block";
+    //        var id = $(this).attr("num")
+    //
+    //
+    //        $.ajax({
+    //            url: "/deleteaccount",
+    //            data: {
+    //                accountId: id
+    //            },
+    //            success: function (result) {
+    //                window.location.href = "/account"
+    //
+    //            }
+    //        })
+    //
+    //
+    //    }
+    //
+
+
+    //根据id查找
+    function findByAccountId() {
+        var id = $(this).attr("num1")
+
+        $.ajax({
+            url: "/findbyaccountId",
+            data: {
+                accountId: id
+            },
+            success: function (result) {
+                if (result.data.status == 1) {
+                    window.location.href = "/account"
+                } else if (result.data.status == 0) {
+                    window.location.href = "/accountmodi"
+                }
+            }
+        })
+
+    }
+
+    //根据id判断
+    function findbyIdaccountdel() {
+
+        var id = $(this).attr("num")
+        $.ajax({
+            url: "/findbyIdaccountdel",
+            data: {
+                accountId: id
+            },
+            success: function (result) {
+
+                if (result.data.status == 0) {
+
+                    updateByDelete(id)
+
+                }
+                else {
+                    window.location.href = "/account"
+                }
+            }
+        })
+    }
+
+    //删除状态
+    function updateByDelete(id) {
+
+
+        alert(1)
+        $.ajax({
+            url: "/updateByDelete",
+            data: {
+                accountId: id,
+                closeDate: new Date()
+            },
+            success: function (result) {
+//                    startime(id)
+                if (result.data.status == 0) {
+
+                }
+                window.location.href = "/account"
+
+            }
+
+        })
+    }
+
+    //修改为暂停状态
+    function updateByStart() {
+        var id = $(this).attr("num2")
+
+        alert(1)
+        $.ajax({
+            url: "/updateByStart",
+            data: {
+                accountId: id,
+            },
+            success: function (result) {
+//                    startime(id)
+                window.location.href = "/account"
+
+            }
+
+        })
+    }
+
+    //修改为启用状态
+    function updateByPause() {
+        var id = $(this).attr("num3")
+
+        alert(1)
+        $.ajax({
+            url: "/updateByPause",
+            data: {
+                accountId: id,
+            },
+            success: function (result) {
+//                    startime(id)
+                window.location.href = "/account"
+
+            }
+
+        })
+    }
+
+    //根据id判断
+    function findbyaccountId() {
+
+        var id = $(this).attr("num4")
+        $.ajax({
+            url: "/findbyIdaccount",
+            data: {
+                accountId: id
+            },
+
+            success: function (result) {
+                window.location.href = "/accountdetail"
+            }
+        })
+
+    }
+
+    //根据idcard查找
+    function selectall() {
+
+        alert(1)
+        $.ajax({
+            url:"/selectbyIdcard",
+            data:{
+                idcardNo:$("#idcardNo").val(),
+                realName:$("#realName").val(),
+                loginName:$("#loginName").val(),
+                status:$("#status option:selected").val()
+            },
+            success:function (result) {
+                $(".emp").remove()
+                alert(result.data)
+//                $.each(result.list, function (i, domEle) {
+//                    addNewTr(domEle)
+//                })
+
+                for (var i=0;i<result.data.length;i++){
+                   var datu=result.data
+                    var da=datu[i]
+                    addNewTr(da)
+
+                }
+
+            }
+        })
+    }
+</script>
+</html>
