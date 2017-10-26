@@ -42,6 +42,9 @@ public class ServiceController {
         return "/service/service_add";
     }
 
+    @RequestMapping(value = "/servicedetail")
+    public String serviceDetail(){return "/service/service_detail";}
+
     //显示全部
     @ResponseBody
     @RequestMapping(value = "/showallservice")
@@ -77,12 +80,23 @@ public class ServiceController {
         return new AjaxResult(account);
     }
 
+    //根据id查找
+    @ResponseBody
+    @RequestMapping(value = "/selectbyserviceid")
+    public AjaxResult selectByServiceId(HttpServletRequest request, HttpServletResponse response, Integer serviceId){
+        Service service = seService.selectBySerPrimaryKey(serviceId);
+
+        request.getSession().setAttribute("service", service);
+        return new AjaxResult(service);
+    }
+
+
     //从session找到accountid
     @ResponseBody
-    @RequestMapping(value = "/getAccountId")
+    @RequestMapping(value = "/getserviceId")
     public AjaxResult getAccountId(HttpServletRequest request,HttpServletResponse response){
-        Account account = (Account) request.getSession().getAttribute("account");
-        return new AjaxResult(account);
+        Service service = (Service) request.getSession().getAttribute("service");
+        return new AjaxResult(service);
 
     }
 
@@ -155,5 +169,7 @@ public class ServiceController {
         Integer status = seService.updateByPause(service);
         return new AjaxResult(status);
     }
+
+
 
 }

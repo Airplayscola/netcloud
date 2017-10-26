@@ -6,221 +6,7 @@
     <title></title>
     <link type="text/css" rel="stylesheet" media="all" href="../styles/global.css"/>
     <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css"/>
-    <script src="/js/jquery-3.2.1.js"></script>
-    <script language="javascript" type="text/javascript">
-        //显示角色详细信息
-        function showDetail(flag, a) {
-            var detailDiv = a.parentNode.getElementsByTagName("div")[0];
-            if (flag) {
-                detailDiv.style.display = "block";
-            }
-            else
-                detailDiv.style.display = "none";
-        }
-        //删除
-        function deleteAccount() {
-            var r = window.confirm("确定要删除此业务账号吗？删除后将不能恢复。");
-            document.getElementById("operate_result_info").style.display = "block";
-        }
-        //开通或暂停
-        function setState() {
-            var r = window.confirm("确定要开通此业务账号吗？");
-            document.getElementById("operate_result_info").style.display = "block";
-        }
 
-        function addNewTr(msg) {
-
-            var serviceId = $("<td></td>").html("<a href='#'>" + msg.serviceId + "</a>")
-            var accountId = $("<td></td>").html("<p>" + msg.account.accountId + "</p>")
-            var idcardNo = $("<td></td>").html("<p>" + msg.account.idcardNo + "</p>")
-            var realName = $("<td></td>").html("<p>" + msg.account.realName + "</p>")
-            var osUsername = $("<td></td>").html("<p>" + msg.osUsername + "</p>")
-            var status = $("<td></td>").html("<p>" + msg.status + "</p>")
-            var unixHost = $("<td></td>").html("<p>" + msg.unixHost + "</p>")
-            var costType = $("<td></td>").html("<p>" + msg.cost.name + "</p>")
-            if (msg.status == 1) {
-                var status = $("<td></td>").html("开通");
-                var imp = $("<td></td>").html("  <input type='button' value='暂停' class='btn_pause' />").click(updateByServiceStart).attr("num2", msg.serviceId);
-            } else if (msg.status == 0) {
-                var status = $("<td></td>").html("暂停");
-                var imp = $("<td></td>").html("  <input type='button' value='启用' class='btn_start' />").click(updateByServicePause).attr("num3", msg.serviceId);
-            } else if (msg.status == 2) {
-                var status = $("<td></td>").html("删除")
-                var imp = $("<td></td>").html(" <input type='button' value='启用' class='btn_start' />")
-
-            }
-            var imp = $("<td></td>").html("  <input type='button' value='启用' class='btn_start' />")
-
-            var imp1 = $("<td></td>").html("<input type='button' value='修改' class='btn_modify' />")
-            var imp2 = $("<td></td>").html("  <input type='button' value='删除' class='btn_delete'/>").click(findbyIdServicedel).attr("num", msg.serviceId)
-            var trob = $("<tr></tr>").attr("class", "emp").append(serviceId).append(accountId).append(idcardNo)
-                    .append(realName).append(osUsername).append(status).append(unixHost).append(costType).append(imp).append(imp1).append(imp2)
-
-            $("#datalist").append(trob)
-
-        }
-
-        function findAll() {
-
-            $.ajax({
-                url: "/pageinfoservice",
-                data: {
-                    pageNo: 1,
-                    pagesize: 5
-                },
-                success: function (result) {
-
-                    var dataList = result.list;
-
-                    console.log(dataList)
-
-                    $.each(dataList, function (i, domEle) {
-                        console.log(domEle);
-                        addNewTr(domEle)
-                    })
-                    page(result)
-                }
-            })
-        }
-
-        findAll()
-
-        //每一页
-        function page(data) {
-            $("#pages").empty()
-            var size = 5
-            $("<a href='#'>首页</a>").attr("no", 1).attr("size", size).click(pageNo).appendTo($("#pages"))
-
-            if (data.isFirstPage) {
-                $("<a href='#'>上一页</a>").attr("no", 1).attr("size", size).click(pageNo).appendTo($("#pages"))
-            } else {
-                $("<a href='#'>上一页</a>").attr("no", data.prePage).attr("size", size).click(pageNo).appendTo($("#pages"))
-            }
-
-            for (var i = 1; i <= data.pages; i++) {
-                $("<a href='#'>" + i + "</a>").attr("no", i).attr("size", size).click(pageNo).appendTo($("#pages"))
-            }
-            if (data.isLastPage) {
-                $("<a href='#'>下一页</a>").attr("no", data.lastPage).attr("size", size).click(pageNo).appendTo($("#pages"))
-            } else {
-                $("<a href='#'>下一页</a>").attr("no", data.nextPage).attr("size", size).click(pageNo).appendTo($("#pages"))
-            }
-            $("<a href='#'>尾页</a>").attr("no", data.lastPage).attr("size", size).click(pageNo).appendTo($("#pages"))
-
-
-        }
-        function pageNo() {
-            var pageNo = $(this).attr("no")
-            var pageSize = $(this).attr("size")
-            $.ajax({
-                url: "/pageinfoservice",
-                data: {
-                    pageNo: pageNo,
-                    pagesize: pageSize
-                },
-                success: function (result) {
-                    console.log(result)
-                    $(".emp").remove()
-                    $.each(result.list, function (i, domEle) {
-                        addNewTr(domEle)
-                    })
-
-                    page(result)
-                }
-
-
-            })
-
-
-        }
-
-        //根据id判断
-        function findbyIdServicedel() {
-
-            var id = $(this).attr("num")
-            $.ajax({
-                url: "/findbyIdServicedel",
-                data: {
-                    serviceId: id
-                },
-                success: function (result) {
-
-                    if (result.data.status == 0) {
-
-                        updateByServiceDelete(id)
-
-                    }
-                    else {
-                        window.location.href = "/service"
-                    }
-                }
-            })
-        }
-
-        //删除状态
-        function updateByServiceDelete(id) {
-
-
-            alert(1)
-            $.ajax({
-                url: "/updateByServiceDelete",
-                data: {
-                    serviceId: id,
-                    closeDate: new Date()
-                },
-                success: function (result) {
-//                    startime(id)
-                    if (result.data.status == 0) {
-
-                    }
-                    window.location.href = "/service"
-
-                }
-
-            })
-        }
-
-        //修改为暂停状态
-        function updateByServiceStart() {
-            var id = $(this).attr("num2")
-
-            alert(1)
-            $.ajax({
-                url: "/updateByServiceStart",
-                data: {
-                    serviceId: id,
-                },
-                success: function (result) {
-//                    startime(id)
-                    window.location.href = "/service"
-
-                }
-
-            })
-        }
-
-        //修改为启用状态
-        function updateByServicePause() {
-            var id = $(this).attr("num3")
-
-            alert(1)
-            $.ajax({
-                url: "/updateByServicePause",
-                data: {
-                    serviceId: id,
-                    pauseDate: new Date()
-                },
-                success: function (result) {
-//                    startime(id)
-                    window.location.href = "/service"
-
-                }
-
-            })
-        }
-
-
-    </script>
 </head>
 <body>
 <!--Logo区域开始-->
@@ -303,4 +89,236 @@
     </div>
 </div>
 </body>
+<script src="/js/jquery-3.2.1.js"></script>
+<script language="javascript" type="text/javascript">
+    //显示角色详细信息
+    function showDetail(flag, a) {
+        var detailDiv = a.parentNode.getElementsByTagName("div")[0];
+        if (flag) {
+            detailDiv.style.display = "block";
+        }
+        else
+            detailDiv.style.display = "none";
+    }
+    //删除
+    function deleteAccount() {
+        var r = window.confirm("确定要删除此业务账号吗？删除后将不能恢复。");
+        document.getElementById("operate_result_info").style.display = "block";
+    }
+    //开通或暂停
+    function setState() {
+        var r = window.confirm("确定要开通此业务账号吗？");
+        document.getElementById("operate_result_info").style.display = "block";
+    }
+
+    function addNewTr(msg) {
+
+        var serviceId = $("<td></td>").html("<a href='/servicedetail'>" + msg.serviceId + "</a>").click(findbyServiceId).attr("num4",msg.serviceId);
+        var accountId = $("<td></td>").html("<p>" + msg.account.accountId + "</p>");
+        var idcardNo = $("<td></td>").html("<p>" + msg.account.idcardNo + "</p>");
+        var realName = $("<td></td>").html("<p>" + msg.account.realName + "</p>");
+        var osUsername = $("<td></td>").html("<p>" + msg.osUsername + "</p>");
+        var status = $("<td></td>").html("<p>" + msg.status + "</p>");
+        var unixHost = $("<td></td>").html("<p>" + msg.unixHost + "</p>");
+        var costType = $("<td></td>").html("<p>" + msg.cost.name + "</p>");
+        if (msg.status == 1) {
+            var status = $("<td></td>").html("开通");
+            var imp = $("<td></td>").html("  <input type='button' value='暂停' class='btn_pause'/>").click(updateByServiceStart).attr("num2", msg.serviceId);
+        } else if (msg.status == 0) {
+            var status = $("<td></td>").html("暂停");
+            var imp = $("<td></td>").html("  <input type='button' value='启用' class='btn_start'/>").click(updateByServicePause).attr("num3", msg.serviceId);
+        } else if (msg.status == 2) {
+            var status = $("<td></td>").html("删除")
+            var imp = $("<td></td>").html(" <input type='button' value='启用' class='btn_start'/>")
+
+        }
+        var imp1 = $("<td></td>").html("<input type='button' value='修改' class='btn_modify' />")
+        var imp2 = $("<td></td>").html("  <input type='button' value='删除' class='btn_delete'/>").click(findbyIdServicedel).attr("num", msg.serviceId);
+        var trob = $("<tr></tr>").attr("class", "emp").append(serviceId).append(accountId).append(idcardNo)
+                .append(realName).append(osUsername).append(status).append(unixHost).append(costType).append(imp).append(imp1).append(imp2)
+
+        $("#datalist").append(trob)
+
+    }
+
+    function findAll() {
+
+        $.ajax({
+            url: "/pageinfoservice",
+            data: {
+                pageNo: 1,
+                pagesize: 5
+            },
+            success: function (result) {
+
+                var dataList = result.list;
+
+                console.log(dataList)
+
+                $.each(dataList, function (i, domEle) {
+                    console.log(domEle);
+                    addNewTr(domEle)
+                })
+                page(result)
+            }
+        })
+    }
+
+    findAll()
+
+    //每一页
+    function page(data) {
+        $("#pages").empty()
+        var size = 5
+        $("<a href='#'>首页</a>").attr("no", 1).attr("size", size).click(pageNo).appendTo($("#pages"))
+
+        if (data.isFirstPage) {
+            $("<a href='#'>上一页</a>").attr("no", 1).attr("size", size).click(pageNo).appendTo($("#pages"))
+        } else {
+            $("<a href='#'>上一页</a>").attr("no", data.prePage).attr("size", size).click(pageNo).appendTo($("#pages"))
+        }
+
+        for (var i = 1; i <= data.pages; i++) {
+            $("<a href='#'>" + i + "</a>").attr("no", i).attr("size", size).click(pageNo).appendTo($("#pages"))
+        }
+        if (data.isLastPage) {
+            $("<a href='#'>下一页</a>").attr("no", data.lastPage).attr("size", size).click(pageNo).appendTo($("#pages"))
+        } else {
+            $("<a href='#'>下一页</a>").attr("no", data.nextPage).attr("size", size).click(pageNo).appendTo($("#pages"))
+        }
+        $("<a href='#'>尾页</a>").attr("no", data.lastPage).attr("size", size).click(pageNo).appendTo($("#pages"))
+
+
+    }
+    function pageNo() {
+        var pageNo = $(this).attr("no")
+        var pageSize = $(this).attr("size")
+        $.ajax({
+            url: "/pageinfoservice",
+            data: {
+                pageNo: pageNo,
+                pagesize: pageSize
+            },
+            success: function (result) {
+                console.log(result)
+                $(".emp").remove()
+                $.each(result.list, function (i, domEle) {
+                    addNewTr(domEle)
+                })
+
+                page(result)
+            }
+
+
+        })
+
+
+    }
+
+    //根据id判断
+    function findbyIdServicedel() {
+
+        var id = $(this).attr("num")
+        $.ajax({
+            url: "/findbyIdServicedel",
+            data: {
+                serviceId: id
+            },
+            success: function (result) {
+
+                if (result.data.status == 0) {
+
+                    updateByServiceDelete(id)
+
+                }
+                else {
+                    window.location.href = "/service"
+                }
+            }
+        })
+    }
+
+    //删除状态
+    function updateByServiceDelete(id) {
+
+
+        alert(1)
+        $.ajax({
+            url: "/updateByServiceDelete",
+            data: {
+                serviceId: id,
+                closeDate: new Date()
+            },
+            success: function (result) {
+//                    startime(id)
+                if (result.data.status == 0) {
+
+                }
+                window.location.href = "/service"
+
+            }
+
+        })
+    }
+
+    //修改为暂停状态
+    function updateByServiceStart() {
+        alert(1)
+        var id = $(this).attr("num2")
+
+        alert(1)
+        $.ajax({
+            url: "/updateByServiceStart",
+            data: {
+                serviceId: id,
+            },
+            success: function (result) {
+//                    startime(id)
+                window.location.href = "/service"
+
+            }
+
+        })
+    }
+
+    //修改为启用状态
+    function updateByServicePause() {
+        var id = $(this).attr("num3")
+
+        alert(1)
+        $.ajax({
+            url: "/updateByServicePause",
+            data: {
+                serviceId: id,
+                pauseDate: new Date()
+            },
+            success: function (result) {
+//                    startime(id)
+                window.location.href = "/service"
+
+            }
+
+        })
+    }
+
+    //根据id判断
+    function findbyServiceId() {
+        alert(1)
+
+        var id = $(this).attr("num4")
+        $.ajax({
+            url: "/selectbyserviceid",
+            data: {
+                serviceId: id
+            },
+
+            success: function (result) {
+                alert(id)
+                window.location.href = "/servicedetail"
+            }
+        })
+
+    }
+
+</script>
 </html>

@@ -65,7 +65,7 @@
                 url: "/getcosttypename",
                 success: function (result) {
                     var da = result.data
-                    for (var i = 0; i < da.length; i++) {
+                    for (var i = 0; i < result.length; i++) {
                         var name1 = da[i].name
                         var costId = da[i].costId
                         $("#selectName").append("<option value='" + costId + "'>" + name1 + "</option>")

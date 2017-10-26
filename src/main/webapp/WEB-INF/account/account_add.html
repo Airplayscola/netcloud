@@ -24,7 +24,12 @@
         //给按钮添加点击事件
         function addaccount() {
 
-
+            var gender=null;
+            if ($("#female").checked==true){
+                gender="女";
+            }else {
+                gender="男";
+            }
             alert(1)
             $.ajax({
                 url: "/addallaccount",
@@ -40,7 +45,7 @@
 //                    birthdate: $("#birthdate").val(),
                     email: $("#email").val(),
                     occupation: $("#occupation").val(),
-                    gender: $("#gender").val(),
+                    gender:gender,
                     mailaddress: $("#mailaddress").val(),
                     zipcode: $("#zipcode").val(),
                     qq: $("#qq").val()

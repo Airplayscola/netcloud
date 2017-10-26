@@ -63,8 +63,9 @@ public class AccountController {
 //        System.out.println(record.getAccountId());
 //        record.setAccountId(122);
         record.setStatus("1");
-        record.setBirthdate(new Date());
+        record.setCreateDate(new Date());
         Integer insert = accountService.insert(record);
+
         return new AjaxResult(insert);
     }
 

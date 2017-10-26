@@ -61,7 +61,7 @@
     <column id="43" parent="31" name="account_id">
       <mandatory>1</mandatory>
       <data-type>int(9)|0</data-type>
-      <default-expression>&apos;0&apos;</default-expression>
+      <sequence-identity>1</sequence-identity>
     </column>
     <column id="44" parent="31" name="recommender_id">
       <data-type>char(9)|0</data-type>
@@ -125,157 +125,170 @@
     <column id="62" parent="31" name="last_login_ip">
       <data-type>varchar(15)|0</data-type>
     </column>
-    <column id="63" parent="32" name="admin_id">
+    <index id="63" parent="31" name="account_account_id_uindex">
+      <columns>account_id</columns>
+      <desc-columns></desc-columns>
+      <unique>1</unique>
+    </index>
+    <key id="64" parent="31" name="PRIMARY">
+      <columns>account_id</columns>
+      <primary>1</primary>
+    </key>
+    <key id="65" parent="31" name="account_account_id_uindex">
+      <columns>account_id</columns>
+      <underlying-index>account_account_id_uindex</underlying-index>
+    </key>
+    <column id="66" parent="32" name="admin_id">
       <mandatory>1</mandatory>
       <data-type>int(8)|0</data-type>
     </column>
-    <column id="64" parent="32" name="admin_code">
+    <column id="67" parent="32" name="admin_code">
       <mandatory>1</mandatory>
       <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="65" parent="32" name="password">
+    <column id="68" parent="32" name="password">
       <mandatory>1</mandatory>
       <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="66" parent="32" name="name">
+    <column id="69" parent="32" name="name">
       <mandatory>1</mandatory>
       <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="67" parent="32" name="telephone">
+    <column id="70" parent="32" name="telephone">
       <data-type>varchar(15)|0</data-type>
     </column>
-    <column id="68" parent="32" name="email">
+    <column id="71" parent="32" name="email">
       <data-type>varchar(50)|0</data-type>
     </column>
-    <column id="69" parent="32" name="enrolldate">
+    <column id="72" parent="32" name="enrolldate">
       <data-type>datetime|0</data-type>
     </column>
-    <key id="70" parent="32" name="PRIMARY">
+    <key id="73" parent="32" name="PRIMARY">
       <columns>admin_id</columns>
       <primary>1</primary>
     </key>
-    <column id="71" parent="33" name="admin_id">
+    <column id="74" parent="33" name="admin_id">
       <mandatory>1</mandatory>
       <data-type>int(8)|0</data-type>
     </column>
-    <column id="72" parent="33" name="role_id">
+    <column id="75" parent="33" name="role_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
     </column>
-    <column id="73" parent="34" name="cost_id">
+    <column id="76" parent="34" name="cost_id">
       <mandatory>1</mandatory>
       <data-type>int(11)|0</data-type>
       <sequence-identity>1</sequence-identity>
     </column>
-    <column id="74" parent="34" name="name">
+    <column id="77" parent="34" name="name">
       <mandatory>1</mandatory>
       <data-type>varchar(50)|0</data-type>
     </column>
-    <column id="75" parent="34" name="base_duration">
+    <column id="78" parent="34" name="base_duration">
       <data-type>int(11)|0</data-type>
     </column>
-    <column id="76" parent="34" name="base_cost">
+    <column id="79" parent="34" name="base_cost">
       <data-type>int(11)|0</data-type>
     </column>
-    <column id="77" parent="34" name="unit_cost">
+    <column id="80" parent="34" name="unit_cost">
       <data-type>int(11)|0</data-type>
     </column>
-    <column id="78" parent="34" name="status">
+    <column id="81" parent="34" name="status">
       <data-type>char(1)|0</data-type>
     </column>
-    <column id="79" parent="34" name="descr">
+    <column id="82" parent="34" name="descr">
       <data-type>varchar(100)|0</data-type>
     </column>
-    <column id="80" parent="34" name="creatime">
+    <column id="83" parent="34" name="creatime">
       <data-type>datetime|0</data-type>
     </column>
-    <column id="81" parent="34" name="startime">
+    <column id="84" parent="34" name="startime">
       <data-type>datetime|0</data-type>
     </column>
-    <column id="82" parent="34" name="cost_type">
-      <data-type>char(1)|0</data-type>
+    <column id="85" parent="34" name="cost_type">
+      <data-type>char(10)|0</data-type>
     </column>
-    <key id="83" parent="34" name="PRIMARY">
+    <key id="86" parent="34" name="PRIMARY">
       <columns>cost_id</columns>
       <primary>1</primary>
     </key>
-    <column id="84" parent="35" name="module_id">
+    <column id="87" parent="35" name="module_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
       <default-expression>&apos;0&apos;</default-expression>
     </column>
-    <column id="85" parent="35" name="name">
+    <column id="88" parent="35" name="name">
       <mandatory>1</mandatory>
       <data-type>varchar(50)|0</data-type>
     </column>
-    <key id="86" parent="35" name="PRIMARY">
+    <key id="89" parent="35" name="PRIMARY">
       <columns>module_id</columns>
       <primary>1</primary>
     </key>
-    <column id="87" parent="36" name="role_id">
+    <column id="90" parent="36" name="role_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
       <default-expression>&apos;0&apos;</default-expression>
     </column>
-    <column id="88" parent="36" name="name">
+    <column id="91" parent="36" name="name">
       <mandatory>1</mandatory>
       <data-type>varchar(50)|0</data-type>
     </column>
-    <key id="89" parent="36" name="PRIMARY">
+    <key id="92" parent="36" name="PRIMARY">
       <columns>role_id</columns>
       <primary>1</primary>
     </key>
-    <column id="90" parent="37" name="role_id">
+    <column id="93" parent="37" name="role_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
     </column>
-    <column id="91" parent="37" name="module_id">
+    <column id="94" parent="37" name="module_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
     </column>
-    <column id="92" parent="38" name="service_id">
+    <column id="95" parent="38" name="service_id">
       <mandatory>1</mandatory>
       <data-type>int(10)|0</data-type>
       <sequence-identity>1</sequence-identity>
     </column>
-    <column id="93" parent="38" name="account_id">
+    <column id="96" parent="38" name="account_id">
       <mandatory>1</mandatory>
       <data-type>int(9)|0</data-type>
     </column>
-    <column id="94" parent="38" name="unix_host">
+    <column id="97" parent="38" name="unix_host">
       <mandatory>1</mandatory>
       <data-type>varchar(15)|0</data-type>
     </column>
-    <column id="95" parent="38" name="os_username">
+    <column id="98" parent="38" name="os_username">
       <mandatory>1</mandatory>
       <data-type>varchar(8)|0</data-type>
     </column>
-    <column id="96" parent="38" name="login_passwd">
+    <column id="99" parent="38" name="login_passwd">
       <mandatory>1</mandatory>
       <data-type>varchar(30)|0</data-type>
     </column>
-    <column id="97" parent="38" name="status">
+    <column id="100" parent="38" name="status">
       <data-type>char(1)|0</data-type>
     </column>
-    <column id="98" parent="38" name="create_date">
+    <column id="101" parent="38" name="create_date">
       <data-type>datetime|0</data-type>
     </column>
-    <column id="99" parent="38" name="pause_date">
+    <column id="102" parent="38" name="pause_date">
       <data-type>datetime|0</data-type>
     </column>
-    <column id="100" parent="38" name="close_date">
+    <column id="103" parent="38" name="close_date">
       <data-type>datetime|0</data-type>
     </column>
-    <column id="101" parent="38" name="cost_id">
+    <column id="104" parent="38" name="cost_id">
       <mandatory>1</mandatory>
       <data-type>int(4)|0</data-type>
     </column>
-    <index id="102" parent="38" name="service_service_id_uindex">
+    <index id="105" parent="38" name="service_service_id_uindex">
       <columns>service_id</columns>
       <desc-columns></desc-columns>
       <unique>1</unique>
     </index>
-    <key id="103" parent="38" name="service_service_id_uindex">
+    <key id="106" parent="38" name="service_service_id_uindex">
       <columns>service_id</columns>
       <underlying-index>service_service_id_uindex</underlying-index>
     </key>

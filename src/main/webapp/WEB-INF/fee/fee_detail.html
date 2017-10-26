@@ -39,8 +39,8 @@
                 <div class="text_info clearfix"><span>资费状态：</span></div>
                 <div class="input_info" >
                     <select class="readonly" disabled id="status">
-                        <!--<option>开通</option>-->
-                        <!--<option>暂停</option>-->
+                        <option>开通</option>
+                        <option>暂停</option>
                         <!--<option>删除</option>-->
                     </select>                        
                 </div>
@@ -98,7 +98,12 @@
                 var data = result.data;
                 $("#costId").val(data.costId)
                 $("#costName").val(data.name)
-                $("#status").val(data.status)
+                if (data.status==0){
+                    $("#status").val("暂停")
+                }
+                if (data.status==1){
+                    $("#status").val("开通")
+                }
                 $("#costType").val(data.costType)
                 $("#baseDuration").val(data.baseDuration)
                 $("#baseCost").val(data.baseCost)
