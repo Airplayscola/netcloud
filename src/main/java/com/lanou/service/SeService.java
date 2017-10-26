@@ -20,5 +20,5 @@ public interface SeService {
     int insertService(Service service);
 
     //根据idcardNo查找
-    Account selectByIdCard(Integer idcard);
+    Account selectByIdCard(String idcard);
 }

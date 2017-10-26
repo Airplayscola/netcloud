@@ -58,23 +58,23 @@ public class ServiceController {
     //根据idcard查找
     @ResponseBody
     @RequestMapping(value = "/selectbyidcard")
-    public AjaxResult selectByIdCard(@RequestParam("idcard")Integer idcard){
+    public AjaxResult selectByIdCard(@RequestParam("idcard")String idcard){
 
+        System.out.println(idcard);
         Account account = seService.selectByIdCard(idcard);
         System.out.println(idcard);
         return new AjaxResult(account);
     }
 
-//    //添加
-//    @ResponseBody
-//    @RequestMapping(value = "/addservice",method = RequestMethod.POST)
-//    public AjaxResult addService(Service service) {
-//        System.out.println(service.getAccountId());
-//        service.setAccountId(122);
-//        service.setStatus("1");
-//        service.setCreateDate(new Date());
-//        Integer insert = seService.insertService(service);
-//        return new AjaxResult(insert);
-//    }
+    //添加
+    @ResponseBody
+    @RequestMapping(value = "/addservice",method = RequestMethod.POST)
+    public AjaxResult addService(Service service) {
+
+        service.setStatus("1");
+        service.setCreateDate(new Date());
+        Integer insert = seService.insertService(service);
+        return new AjaxResult(insert);
+    }
 
 }

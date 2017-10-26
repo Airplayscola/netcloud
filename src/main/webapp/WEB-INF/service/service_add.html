@@ -27,13 +27,30 @@
 
             //根据idcard查询
             function selectByIdCard() {
+                alert(1)
+                alert($("#idcard").val())
                 $.ajax({
                     url:"/selectbyidcard",
                     data:{
-                        idcard:$("")
+                        idcard:$("#idcard").val()
+                    },
+                    success:function (result) {
+
+                      var data=result.data
+                        alert(data.loginName)
+                        $("#loginName").val(data.loginName)
                     }
                 })
             }
+
+
+           function addservice() {
+               $.ajax({
+                   url:"/addservice",
+
+               })
+
+           }
         </script>
     </head>
     <body>
@@ -67,13 +84,13 @@
                 <div class="text_info clearfix"><span>身份证：</span></div>
                 <div class="input_info">
                     <input type="text" class="width180" id="idcard" />
-                    <input type="button" value="查询账务账号" class="btn_search_large" />
+                    <input type="button" value="查询账务账号" class="btn_search_large" onclick="selectByIdCard()"/>
                     <span class="required">*</span>
                     <div class="validate_msg_short">没有此身份证号，请重新录入。</div>
                 </div>
                 <div class="text_info clearfix"><span>账务账号：</span></div>
                 <div class="input_info">
-                    <input type="text" value="zhangsan1" onkeyup="searchAccounts(this);" />
+                    <input type="text" id="loginName" onkeyup="searchAccounts(this);" />
                     <span class="required">*</span>
                     <div class="validate_msg_long">没有此账务账号，请重新录入。</div>
                 </div>

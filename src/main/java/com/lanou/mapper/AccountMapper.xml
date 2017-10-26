@@ -56,7 +56,7 @@
             </if>
         </where>
     </select>
-    <select id="selectByIdCard" resultType="com.lanou.bean.Account">
+    <select id="selectByIdCard" resultType="com.lanou.bean.Account" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/> FROM account WHERE idcard_no=#{idcard}
     </select>
 

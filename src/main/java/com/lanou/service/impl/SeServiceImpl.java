@@ -34,7 +34,7 @@ public class SeServiceImpl implements SeService {
         return serviceMapper.insert(service);
     }
 
-    public Account selectByIdCard(Integer idcard) {
+    public Account selectByIdCard(String idcard) {
         return accountMapper.selectByIdCard(idcard);
     }
 

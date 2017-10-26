@@ -25,7 +25,7 @@ public interface AccountMapper {
     int updateByPause(Account record);
 
    List <Account> selectByIdcardNo(Account record);
-    Account selectByIdCard(@Param("idcard")Integer idcard);
+    Account selectByIdCard(@Param("idcard")String idcard);
 
     List<Account> findAll();
 }
